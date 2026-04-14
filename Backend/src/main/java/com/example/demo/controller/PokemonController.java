@@ -3,8 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.data.PokemonSeedData;
 import com.example.demo.dto.BattleRequest;
 import com.example.demo.model.Pokemon;
-import com.example.demo.service.BattleService;
-import com.example.demo.service.PokemonService;
+import com.example.demo.services.BattleService;
+import com.example.demo.services.PokemonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
