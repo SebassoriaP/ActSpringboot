@@ -1,7 +1,8 @@
-package com.example.demo.service;
+package com.example.demo.services;
+
+import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Pokemon;
-import org.springframework.stereotype.Service;
 
 @Service
 public class BattleService {
