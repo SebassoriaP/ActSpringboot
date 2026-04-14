@@ -13,6 +13,23 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [loadingBattle, setLoadingBattle] = useState(false);
   const [error, setError] = useState("");
+  const [lastAttack, setLastAttack] = useState<string>("");
+
+  useEffect(() => {
+    const eventSource = new EventSource("http://localhost:8080/api/events");
+
+    eventSource.onmessage = async (event) => {
+      console.log("Cambio detectado:", event.data);
+
+      const response = await fetch(`${API_URL}/pokemons`);
+      const data = await response.json();
+      setPokemons(data);
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -55,9 +72,9 @@ export default function App() {
     setSelectedPokemons((prev) => [...prev, pokemon]);
   };
 
-  const handleFight = async () => {
+  const handleBattle = async () => {
     if (selectedPokemons.length !== 2) {
-      alert("Selecciona exactamente 2 pokémon");
+      alert("Selecciona 2 pokémon");
       return;
     }
 
@@ -76,10 +93,16 @@ export default function App() {
         }),
       });
 
-      if (!response.ok) throw new Error("No se pudo simular la pelea");
+      if (!response.ok) throw new Error("Error en combate");
 
       const data: BattleResponse = await response.json();
+
       setBattleResult(data);
+
+      setLastAttack(
+        `${data.pokemon1.name} ⚔️ ${data.pokemon2.name} → Ganador: ${data.winner.name}`
+      );
+
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -87,10 +110,12 @@ export default function App() {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    await fetch(`${API_URL}/reset`, { method: "POST" });
+
     setSelectedPokemons([]);
     setBattleResult(null);
-    setError("");
+    setLastAttack("");
   };
 
   return (
@@ -137,15 +162,17 @@ export default function App() {
           <div className="actions">
             <button
               className="btn-primary"
-              onClick={handleFight}
+              onClick={handleBattle}
               disabled={loadingBattle}
             >
-              {loadingBattle ? "Peleando..." : "Pelear"}
+              {loadingBattle ? "Combatiendo..." : "⚔️ Combatir"}
             </button>
 
             <button className="btn-secondary" onClick={handleReset}>
-              Reiniciar
+              🔄 Reset
             </button>
+
+            {lastAttack && <p className="attack-log">{lastAttack}</p>}
           </div>
 
           <BattleResult result={battleResult} />
