@@ -15,7 +15,6 @@ public class FirestoreListenerService {
 
     private final Firestore firestore;
 
-    // Lista de subscribers (SSE clients)
     private final CopyOnWriteArrayList<Consumer<String>> listeners = new CopyOnWriteArrayList<>();
 
     public FirestoreListenerService(Firestore firestore) {
@@ -31,7 +30,6 @@ public class FirestoreListenerService {
                 for (DocumentChange dc : snapshots.getDocumentChanges()) {
                     String change = dc.getType().name();
 
-                    // Notificar a frontend
                     listeners.forEach(listener -> listener.accept(change));
                 }
             });
