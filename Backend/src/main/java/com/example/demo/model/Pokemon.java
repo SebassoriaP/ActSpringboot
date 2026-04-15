@@ -7,6 +7,7 @@ public class Pokemon {
     private String name;
     private String type;
     private int hp;
+    private int maxHp;
     private int attack;
     private int defense;
     private List<String> abilities;
@@ -21,6 +22,7 @@ public class Pokemon {
         this.name = name;
         this.type = type;
         this.hp = hp;
+        this.maxHp = hp;
         this.attack = attack;
         this.defense = defense;
         this.abilities = abilities;
@@ -39,6 +41,9 @@ public class Pokemon {
 
     public int getHp() { return hp; }
     public void setHp(int hp) { this.hp = hp; }
+
+    public int getMaxHp() { return maxHp; }
+    public void setMaxHp(int maxHp) { this.maxHp = maxHp; }
 
     public int getAttack() { return attack; }
     public void setAttack(int attack) { this.attack = attack; }

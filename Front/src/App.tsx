@@ -37,6 +37,8 @@ export default function App() {
         setLoading(true);
         setError("");
 
+        await fetch(`${API_URL}/reset`, { method: "POST" });
+
         const response = await fetch(`${API_URL}/pokemons`);
         if (!response.ok) throw new Error("No se pudieron cargar los pokémon");
 

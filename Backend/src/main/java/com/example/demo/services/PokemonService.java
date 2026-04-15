@@ -53,6 +53,7 @@ public class PokemonService {
     public List<String> seedPokemons(List<Pokemon> pokemons) throws Exception {
         List<String> results = new ArrayList<>();
         for (Pokemon pokemon : pokemons) {
+            pokemon.setHp(pokemon.getMaxHp());
             results.add(savePokemon(pokemon));
         }
         return results;
